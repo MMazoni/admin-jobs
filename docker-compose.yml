@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
+    image: php-7.2
     container_name: app
     restart: unless-stopped
     tty: true
@@ -35,7 +35,37 @@ services:
     networks:
       - app-network
 
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: admin
+      MYSQL_ROOT_PASSWORD: database123
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+      
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - app-network
+
 #Docker Networks
 networks:
   app-network:
     driver: bridge
+#Volumes
+volumes:
+  dbdata:
+    driver: local
