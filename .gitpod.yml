@@ -1,0 +1,8 @@
+tasks:
+  - init: composer install
+    command: cp .env.example .env
+  - command: php artisan serve
+
+ports:
+  - port: 8000
+    onOpen: open-browser
