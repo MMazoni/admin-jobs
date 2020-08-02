@@ -1,13 +1,7 @@
 tasks:
   - init: composer install
-<<<<<<< HEAD
     command: php artisan serve
   - init: cp .env.example .env
-=======
-    command: composer install
-  - command: cp .env.example .env
-  - command: php artisan serve
->>>>>>> c68192ebfd13d511c4c66d277238b5cd990a52a3
 
 ports:
   - port: 8000
