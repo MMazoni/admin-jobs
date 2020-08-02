@@ -6,3 +6,6 @@ tasks:
 ports:
   - port: 8000
     onOpen: open-browser
+
+image:
+  file: .gitpod.dockerfile
