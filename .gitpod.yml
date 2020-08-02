@@ -1,6 +1,7 @@
 tasks:
   - init: composer install
-    command: cp .env.example .env
+    command: composer install
+  - command: cp .env.example .env
   - command: php artisan serve
 
 ports:
