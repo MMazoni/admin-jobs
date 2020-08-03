@@ -11,14 +11,16 @@ class JobController extends Controller
     {
         $jobs = Job::all();
 
-        return view('jobs.index', compact('jobs'));        
+        return view('jobs.index', compact('jobs'));
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        Job::create(request([
-            'company_name', 'description', 'role', 'level',
-            'requirements', 'location', 'benefits'
-        ]));
+        $request->validate([
+            'company_name' => 'required',
+            'description' => 'required'
+        ]);
+        //dd($request->request);
+        Job::create($request->all());
     }
 }
