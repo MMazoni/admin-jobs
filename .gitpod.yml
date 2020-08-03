@@ -9,3 +9,7 @@ ports:
 
 image:
   file: .gitpod.dockerfile
+
+vscode:
+  extensions:
+    - MehediDracula.php-namespace-resolver@1.1.8:XkLZydiXMIueRdwf/qurhQ==
