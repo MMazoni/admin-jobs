@@ -16,11 +16,21 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $this->validateRequest($request);
+        Job::create($request->all());
+    }
+
+    public function edit(Request $request, Job $job)
+    {
+        $this->validateRequest($request);
+        $job->update($request->all());
+    }
+
+    protected function validateRequest(Request $request)
+    {
+        return $request->validate([
             'company_name' => 'required',
             'description' => 'required'
         ]);
-        //dd($request->request);
-        Job::create($request->all());
     }
 }

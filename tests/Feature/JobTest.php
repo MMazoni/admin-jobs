@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Job;
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class JobTest extends TestCase
 {
@@ -14,15 +15,7 @@ class JobTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $attributes = [
-            'company_name' => $this->faker->name,
-            'description' => $this->faker->paragraph,
-            'role' => $this->faker->name,
-            'level' => $this->faker->sentence,
-            'requirements' => $this->faker->paragraph,
-            'location' => $this->faker->sentence,
-            'benefits' => $this->faker->sentence,
-        ];
+        $attributes = $this->fakeAttributes();
 
         $this->post('/job', $attributes);
         $this->assertDatabaseHas('jobs', $attributes);
@@ -31,31 +24,52 @@ class JobTest extends TestCase
 
     public function testRequiredName()
     {
-        $response = $this->post('/job', [
-            'company_name' => $this->faker->name,
-            'description' => '',
-            'role' => $this->faker->name,
-            'level' => $this->faker->sentence,
-            'requirements' => $this->faker->paragraph,
-            'location' => $this->faker->sentence,
-            'benefits' => $this->faker->sentence,
-        ]);
+        $attributes = $this->fakeAttributes();
+        $attributes['description'] = '';
+
+        $response = $this->post('/job', $attributes);
 
         $response->assertSessionHasErrors('description');
     }
 
     public function testRequiredDescription()
     {
-        $response = $this->post('/job', [
-            'company_name' => '',
+        $attributes = $this->fakeAttributes();
+        $attributes['company_name'] = '';
+
+        $response = $this->post('/job', $attributes);
+
+        $response->assertSessionHasErrors('company_name');
+    }
+
+    public function testEditJob()
+    {
+        $this->withoutExceptionHandling();
+
+        $attributes = $this->fakeAttributes();
+        $this->post('/job', $attributes);
+
+        $id = Job::first()->id;
+
+        $response = $this->patch('/job/' . $id, [
+            'company_name' => 'Biro',
+            'description' => 'Descrição massa!'
+        ]);
+
+        $this->assertEquals('Biro', Job::first()->company_name);
+        $this->assertEquals('Descrição massa!', Job::first()->description);
+    }
+
+    protected function fakeAttributes()
+    {
+        return [
+            'company_name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'role' => $this->faker->name,
             'level' => $this->faker->sentence,
             'requirements' => $this->faker->paragraph,
             'location' => $this->faker->sentence,
             'benefits' => $this->faker->sentence,
-        ]);
-
-        $response->assertSessionHasErrors('company_name');
+        ];
     }
 }

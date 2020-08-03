@@ -19,3 +19,4 @@ Route::get('/', function () {
 
 Route::get('/job', 'JobController@index');
 Route::post('/job', 'JobController@store');
+Route::patch('/job/{job}', 'JobController@edit');
